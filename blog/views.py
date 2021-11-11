@@ -6,7 +6,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DetailView, D
 
 from blog.forms import BoatForm, UpdateBoatForm
 from blog.models import Boat
-
+import requests
 
 class HomeView(ListView):
     model = Boat
@@ -31,3 +31,20 @@ class DeleteBoatView(DeleteView):
     model = Boat
     template_name = 'boat/delete_boat.html'
     success_url = reverse_lazy('my-boat')
+
+def  index(request):
+    api_url = "http://api.openweathermap.org/data/2.5/weather?appid=359c651e9120433bf403e529363a3da4&q="
+    city_name = "Auckland"
+
+    URL= api_url + city
+
+    response = request.get(url)
+    content = response.json()
+    city_weather = {
+        'city': city_name,
+        'temperature': content['main']['temp'],
+        'description': content['weather'][0]['description'],
+        'icon': content['weather'][0]['icon'],
+    }
+
+    return render(request,'weather.html',city_weather)
